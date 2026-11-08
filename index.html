@@ -10,46 +10,62 @@
   <meta name="theme-color" content="#4a0d1a">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600&family=Noto+Sans+Gujarati:wght@400;600&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <canvas id="fx" aria-hidden="true"></canvas>
 
-  <!-- Opening screen -->
+  <!-- Opening screen: light all the diyas -->
   <section id="intro" class="screen active">
-    <div class="diya" aria-hidden="true">
-      <div class="flame"></div>
-      <div class="bowl"></div>
-    </div>
-    <p class="intro-text">आपके लिए एक खास शुभकामना</p>
-    <button id="openBtn" class="btn primary">शुभकामना खोलें 🪔</button>
+    <p class="intro-title">दीपक जलाएँ</p>
+    <p class="intro-sub">हर दीपक को छूकर जलाइए 🪔</p>
+    <div id="diyaRow" class="diya-row"></div>
+    <p id="diyaCount" class="diya-count">0 / 5</p>
+    <button id="skipBtn" class="link-btn">सीधे शुभकामना खोलें →</button>
   </section>
 
   <!-- Wish screen -->
   <main id="wish" class="screen">
-    <div class="card">
+    <div id="card" class="card">
+      <div id="rangoli" class="rangoli" aria-hidden="true"></div>
       <div class="corner tl"></div><div class="corner tr"></div>
       <div class="corner bl"></div><div class="corner br"></div>
 
+      <p id="greeting" class="greeting"></p>
       <p class="om">ॐ</p>
       <p id="toName" class="to-name"></p>
       <h1 class="title">नूतन वर्षाभिनंदन</h1>
       <p class="gu">નૂતન વર્ષાભિનંદન</p>
+      <p class="samvat">कार्तिक शुक्ल प्रतिपदा • विक्रम संवत २०८३</p>
       <div class="divider"><span>🪔</span></div>
       <p id="message" class="message"></p>
-      <p class="saal">साल मुबारक! 🎆</p>
+      <p id="saal" class="saal">साल मुबारक! 🎆</p>
     </div>
 
+    <p class="hint">✨ स्क्रीन पर कहीं भी छुएँ — फूल और आतिशबाज़ी खिल उठेंगे</p>
+
     <div class="actions">
+      <button id="newBtn" class="btn primary">✨ नई शुभकामना</button>
       <button id="replayBtn" class="btn ghost">🔁 फिर से देखें</button>
+      <button id="saveBtn" class="btn ghost">📥 इमेज सेव करें</button>
       <button id="muteBtn" class="btn ghost">🔊 संगीत</button>
     </div>
+    <p id="saveNote" class="note" aria-live="polite"></p>
 
     <section class="share">
       <h2>अपनों को शुभकामना भेजें</h2>
       <label for="nameInput">उनका नाम लिखें</label>
       <input id="nameInput" type="text" placeholder="जैसे: राहुल" maxlength="40" autocomplete="off">
+      <label for="themeSelect">शुभकामना किसके लिए?</label>
+      <select id="themeSelect">
+        <option value="">सबके लिए (सामान्य)</option>
+        <option value="family">परिवार</option>
+        <option value="wealth">धन-समृद्धि / व्यापार</option>
+        <option value="health">स्वास्थ्य</option>
+        <option value="success">सफलता</option>
+        <option value="friends">दोस्त</option>
+      </select>
       <div class="share-row">
         <button id="waBtn" class="btn primary">WhatsApp पर भेजें</button>
         <button id="copyBtn" class="btn ghost">लिंक कॉपी करें</button>
