@@ -4,11 +4,10 @@
   const canvas = $('fx'), ctx = canvas.getContext('2d');
 
   // ---------- Wishes (one is picked at random each time) ----------
-  const WISHES = {
+  const WISHES_HI = {
     general: [
       'नया साल आपके जीवन में सुख, समृद्धि और शांति लाए।\nमाँ लक्ष्मी की कृपा सदा आप और आपके परिवार पर बनी रहे।\nहर दिन दीपक की तरह रोशन और खुशियों से भरा हो।',
       'नया सवेरा, नई आशा, नई उमंग,\nआपके जीवन में खिलें खुशियों के हज़ार रंग।\nनूतन वर्षाभिनंदन!',
-      'બેસતા વર્ષની હાર્દિક શુભકામનાઓ!\nનવું વર્ષ તમારા જીવનમાં સુખ, શાંતિ અને સમૃદ્ધિ લાવે.',
       'बीते साल की कड़वी यादें भूल जाइए,\nनए साल की मीठी उम्मीदें अपनाइए।\nआपको और आपके परिवार को नूतन वर्ष मुबारक!',
       'दीपक की लौ की तरह आपका जीवन जगमगाता रहे,\nऔर हर अँधेरा आपसे दूर रहे।\nनूतन वर्षाभिनंदन!',
     ],
@@ -41,7 +40,139 @@
       'दोस्त, यह साल आपके लिए खुशियाँ, सफलता\nऔर ढेर सारे अच्छे पल लेकर आए।\nहमेशा यूँ ही मुस्कुराते रहिए!',
     ],
   };
-  const ALL = [].concat(...Object.values(WISHES));
+  const WISHES_GU = {
+    general: [
+      'નવું વર્ષ તમારા જીવનમાં સુખ, સમૃદ્ધિ અને શાંતિ લાવે.\nમાતા લક્ષ્મીની કૃપા તમારા અને તમારા પરિવાર પર સદા રહે.\nદરેક દિવસ દીવાની જેમ ઝળહળતો અને ખુશીઓથી ભરેલો હોય.',
+      'નવી સવાર, નવી આશા, નવી ઉમંગ,\nતમારા જીવનમાં ખીલે ખુશીઓના હજાર રંગ.\nનૂતન વર્ષાભિનંદન!',
+      'બેસતા વર્ષની હાર્દિક શુભકામનાઓ!\nબીતેલા વર્ષની કડવી યાદો ભૂલી જાઓ,\nઅને નવા વર્ષની મીઠી આશાઓ અપનાવો.',
+      'દીવાની જ્યોતની જેમ તમારું જીવન ઝગમગતું રહે,\nઅને દરેક અંધકાર તમારાથી દૂર રહે.\nસાલ મુબારક!',
+      'નવા વર્ષે તમારા દરેક સપના સાકાર થાય,\nઘરમાં આનંદ અને હૃદયમાં શાંતિ રહે.\nજય શ્રી કૃષ્ણ, સાલ મુબારક!',
+    ],
+    family: [
+      'તમારો પરિવાર સદા હસતો-રમતો રહે.\nઘરમાં પ્રેમ, એકતા અને આશીર્વાદનો પ્રકાશ રહે.\nનવું વર્ષ મંગલમય હો!',
+      'માતા-પિતાના આશીર્વાદ અને સ્વજનોનો સાથ,\nદરેક દિવસને બનાવે ખુશીઓની સોગાત.\nનવું વર્ષ તમારા ઘરઆંગણે અજવાળું ભરે.',
+      'સંબંધોમાં મીઠાશ, ઘરમાં શાંતિ,\nઅને દિલમાં અપનાપણું સદા રહે.\nનવું વર્ષ આખા પરિવારને શુભ હો.',
+    ],
+    wealth: [
+      'મા લક્ષ્મીની કૃપાથી તમારું ઘર ધન-ધાન્યથી ભરેલું રહે.\nવ્યવસાયમાં દિન બમણી અને રાત ચોગણી પ્રગતિ થાય.\nનવું વર્ષ શુભ અને લાભદાયી હો!',
+      'લક્ષ્મીજી તમારા આંગણે સદા બિરાજે.\nસમૃદ્ધિ, સફળતા અને સન્માન તમારી સાથે રહે.\nશુભ-લાભ!',
+      'ચોપડા પૂજનની જેમ તમારો દરેક હિસાબ શુભ રહે,\nખુશીઓ જમા થાય અને ચિંતાઓ ઘટતી રહે.\nનવું વર્ષ મંગલમય હો!',
+    ],
+    health: [
+      'તમે સદા સ્વસ્થ, સુખી અને ઉર્જાવાન રહો.\nદરેક સવાર નવી શક્તિ અને દરેક સાંજ શાંતિ લાવે.\nનવું વર્ષ આરોગ્યથી ભરેલું હો.',
+      'તન સ્વસ્થ, મન પ્રસન્ન અને આત્મા શાંત રહે.\nભગવાન તમને લાંબી ઉંમર અને સારું સ્વાસ્થ્ય આપે.\nનૂતન વર્ષાભિનંદન!',
+      'આ વર્ષે દરેક ચિંતા દીવાની જ્યોતમાં બળી જાય,\nઅને તમારા જીવનમાં માત્ર શાંતિ અને તંદુરસ્તી રહે.',
+    ],
+    success: [
+      'આ નવા વર્ષે તમારા બધા સપના સાચા થાય.\nદરેક પ્રયત્નમાં સફળતા અને દરેક પગલે જીત મળે.\nશુભ શરૂઆત!',
+      'નવી આશાઓ, નવો ઉત્સાહ, નવી મંઝિલો,\nતમારું દરેક લક્ષ્ય આ વર્ષે પૂરું થાય.\nનવું વર્ષ તમારા નામે!',
+      'મહેનત તમારી, આશીર્વાદ અમારા,\nસફળતા તમારા કદમ ચૂમે.\nસાલ મુબારક!',
+    ],
+    friends: [
+      'તમારી મિત્રતા મારા જીવનની સૌથી સુંદર ભેટ છે.\nનવું વર્ષ આપણી યાદોમાં વધુ રંગ ભરે.\nનૂતન વર્ષાભિનંદન, મિત્ર!',
+      'હાસ્ય, મસ્તી અને ઢગલો મીઠાઈ સાથે,\nનવું વર્ષ તમારા માટે યાદગાર બને.\nસાલ મુબારક!',
+      'દોસ્ત, આ વર્ષ તમારા માટે ખુશીઓ, સફળતા\nઅને ઘણા સારા પળો લઈને આવે.\nહંમેશા આમ જ હસતા રહો!',
+    ],
+  };
+  const WISHES_EN = {
+    general: [
+      'May the new year bring you happiness, prosperity and peace.\nMay Maa Lakshmi\'s blessings always be with you and your family.\nMay every day shine like a diya and be full of joy.',
+      'A new dawn, new hope, new joy,\nmay your life bloom with a thousand colours.\nHappy New Year!',
+      'Leave the bitter memories of the past year behind,\nand embrace the sweet hopes of the new one.\nWarm New Year wishes to you and your family!',
+      'May your life glow like the flame of a diya,\nand may every darkness stay far away from you.\nSaal Mubarak!',
+      'May all your dreams come true this new year,\nwith joy in your home and peace in your heart.\nJai Shri Krishna, Saal Mubarak!',
+    ],
+    family: [
+      'May your family always be smiling and happy.\nMay love, unity and blessings light up your home.\nHappy New Year!',
+      'With the blessings of parents and the company of loved ones,\nmay every day be a gift of happiness.\nMay the new year fill your home with light.',
+      'Sweetness in relationships, peace at home,\nand warmth in every heart.\nMay the new year be auspicious for your whole family.',
+    ],
+    wealth: [
+      'By Maa Lakshmi\'s grace, may your home overflow with prosperity.\nMay your business grow by leaps and bounds.\nA happy and profitable new year!',
+      'May Lakshmi ji reside at your door forever.\nMay prosperity, success and respect stay with you.\nShubh Labh!',
+      'May every account of yours be auspicious like Chopda Pujan,\nwith joys growing and worries shrinking.\nHappy New Year!',
+    ],
+    health: [
+      'May you always stay healthy, happy and full of energy.\nMay every morning bring new strength and every evening peace.\nA new year full of good health.',
+      'A healthy body, a happy mind and a calm soul.\nMay God bless you with a long life and good health.\nHappy New Year!',
+      'May every worry burn away in the flame of the diya this year,\nleaving only peace and good health in your life.',
+    ],
+    success: [
+      'May all your dreams come true this new year.\nMay every effort meet success and every step bring victory.\nShubh Aarambh!',
+      'New hopes, new enthusiasm, new destinations,\nmay every goal of yours be achieved this year.\nThis new year is yours!',
+      'The hard work is yours, the blessings are ours.\nMay success touch your feet.\nSaal Mubarak!',
+    ],
+    friends: [
+      'Your friendship is the most beautiful gift in my life.\nMay the new year add even more colour to our memories.\nHappy New Year, my friend!',
+      'With laughter, fun and lots of mithai,\nmay the new year be unforgettable for you.\nSaal Mubarak!',
+      'Friend, may this year bring you joy, success\nand plenty of good moments.\nKeep smiling, always!',
+    ],
+  };
+  const WISHES_BY = { hi: WISHES_HI, gu: WISHES_GU, en: WISHES_EN };
+  let WISHES = WISHES_HI, ALL = [];
+
+  // ---------- Interface text ----------
+  const STR = {
+    hi: {
+      introTitle: 'दीपक जलाएँ', introSub: 'हर दीपक को छूकर जलाइए 🪔', skip: 'सीधे शुभकामना खोलें →',
+      diyaDone: 'शुभ आरंभ! 🎆',
+      morning: '🌅 शुभ प्रभात', noon: '☀️ शुभ दोपहर', eve: '🌇 शुभ संध्या', night: '🌙 नमस्ते',
+      title: 'नूतन वर्षाभिनंदन', sub: 'નૂતન વર્ષાભિનંદન', samvat: 'कार्तिक शुक्ल प्रतिपदा • विक्रम संवत २०८३',
+      saal: 'साल मुबारक! 🎆', hint: '✨ स्क्रीन पर कहीं भी छुएँ — फूल और आतिशबाज़ी खिल उठेंगे',
+      newBtn: '✨ नई शुभकामना', replayBtn: '🔁 फिर से देखें', saveBtn: '📥 इमेज सेव करें',
+      mute: '🔊 संगीत', muteOff: '🔇 संगीत',
+      shareTitle: 'अपनों को शुभकामना भेजें', nameLabel: 'उनका नाम लिखें', namePh: 'जैसे: राहुल',
+      themeLabel: 'शुभकामना किसके लिए?', langLabel: 'भाषा',
+      th_general: 'सबके लिए (सामान्य)', th_family: 'परिवार', th_wealth: 'धन-समृद्धि / व्यापार',
+      th_health: 'स्वास्थ्य', th_success: 'सफलता', th_friends: 'दोस्त',
+      wa: 'WhatsApp पर भेजें', copy: 'लिंक कॉपी करें',
+      footer: 'Made with ❤️ • नववर्ष की हार्दिक शुभकामनाएँ',
+      nameFmt: (n) => n + ' जी 🙏',
+      saving: 'इमेज बन रही है…', saved: 'इमेज डाउनलोड हो गई ✅', saveFail: 'इमेज नहीं बन सकी, फिर कोशिश करें',
+      copied: 'लिंक कॉपी हो गया ✅',
+      shareMsg: 'नूतन वर्षाभिनंदन! 🪔 आपके लिए नववर्ष की एक खास शुभकामना:',
+    },
+    gu: {
+      introTitle: 'દીવા પ્રગટાવો', introSub: 'દરેક દીવાને સ્પર્શ કરીને પ્રગટાવો 🪔', skip: 'સીધી શુભકામના ખોલો →',
+      diyaDone: 'શુભ શરૂઆત! 🎆',
+      morning: '🌅 સુપ્રભાત', noon: '☀️ શુભ બપોર', eve: '🌇 શુભ સંધ્યા', night: '🌙 નમસ્તે',
+      title: 'નૂતન વર્ષાભિનંદન', sub: 'જય શ્રી કૃષ્ણ 🙏', samvat: 'કારતક સુદ એકમ • વિક્રમ સંવત ૨૦૮૩',
+      saal: 'સાલ મુબારક! 🎆', hint: '✨ સ્ક્રીન પર ક્યાંય પણ અડો — ફૂલો અને આતશબાજી ખીલી ઉઠશે',
+      newBtn: '✨ નવી શુભકામના', replayBtn: '🔁 ફરી જુઓ', saveBtn: '📥 ઇમેજ સેવ કરો',
+      mute: '🔊 સંગીત', muteOff: '🔇 સંગીત',
+      shareTitle: 'સ્વજનોને શુભકામના મોકલો', nameLabel: 'તેમનું નામ લખો', namePh: 'જેમ કે: રાહુલ',
+      themeLabel: 'શુભકામના કોના માટે?', langLabel: 'ભાષા',
+      th_general: 'સૌ માટે (સામાન્ય)', th_family: 'પરિવાર', th_wealth: 'ધન-સમૃદ્ધિ / વ્યવસાય',
+      th_health: 'સ્વાસ્થ્ય', th_success: 'સફળતા', th_friends: 'મિત્રો',
+      wa: 'WhatsApp પર મોકલો', copy: 'લિંક કૉપી કરો',
+      footer: 'Made with ❤️ • નવા વર્ષની હાર્દિક શુભકામનાઓ',
+      nameFmt: (n) => n + ' જી 🙏',
+      saving: 'ઇમેજ બની રહી છે…', saved: 'ઇમેજ ડાઉનલોડ થઈ ✅', saveFail: 'ઇમેજ બની શકી નહીં, ફરી પ્રયત્ન કરો',
+      copied: 'લિંક કૉપી થઈ ગઈ ✅',
+      shareMsg: 'નૂતન વર્ષાભિનંદન! 🪔 તમારા માટે નવા વર્ષની એક ખાસ શુભકામના:',
+    },
+    en: {
+      introTitle: 'Light the diyas', introSub: 'Tap each diya to light it 🪔', skip: 'Open the wish directly →',
+      diyaDone: 'Shubh Aarambh! 🎆',
+      morning: '🌅 Good morning', noon: '☀️ Good afternoon', eve: '🌇 Good evening', night: '🌙 Namaste',
+      title: 'Happy New Year', sub: 'નૂતન વર્ષાભિનંદન', samvat: 'Kartik Shukla Pratipada • Vikram Samvat 2083',
+      saal: 'Saal Mubarak! 🎆', hint: '✨ Tap anywhere — flowers and fireworks will bloom',
+      newBtn: '✨ New wish', replayBtn: '🔁 Watch again', saveBtn: '📥 Save as image',
+      mute: '🔊 Music', muteOff: '🔇 Music',
+      shareTitle: 'Send this wish to your loved ones', nameLabel: 'Their name', namePh: 'e.g. Rahul',
+      themeLabel: 'Wish for', langLabel: 'Language',
+      th_general: 'Everyone (general)', th_family: 'Family', th_wealth: 'Wealth / Business',
+      th_health: 'Health', th_success: 'Success', th_friends: 'Friends',
+      wa: 'Send on WhatsApp', copy: 'Copy link',
+      footer: 'Made with ❤️ • Warm wishes for the new year',
+      nameFmt: (n) => 'Dear ' + n + ' 🙏',
+      saving: 'Creating image…', saved: 'Image downloaded ✅', saveFail: 'Could not create the image, please try again',
+      copied: 'Link copied ✅',
+      shareMsg: 'Happy New Year! 🪔 A special wish for you:',
+    },
+  };
+  let lang = 'hi';
+  const t = (k) => STR[lang][k];
 
   // ---------- Colour palettes (a new one with each wish) ----------
   const PALETTES = [
@@ -63,21 +194,43 @@
   const params = new URLSearchParams(location.search);
   const name = (params.get('name') || '').trim().slice(0, 40);
   let theme = params.get('for') || '';
-  if (!WISHES[theme]) theme = '';
-  if (name) {
-    $('toName').textContent = name + ' जी 🙏';
-    $('nameInput').value = name;
-  }
+  if (!WISHES_HI[theme]) theme = '';
+  if (name) $('nameInput').value = name;
   $('themeSelect').value = theme;
 
-  // ---------- Greeting by time of day ----------
-  (function () {
+  // language: ?lang= in the link, else the phone/browser language, else Hindi
+  function detectLang() {
+    const q = (params.get('lang') || '').toLowerCase();
+    if (STR[q]) return q;
+    const nav = ((navigator.languages && navigator.languages[0]) || navigator.language || '').toLowerCase();
+    if (nav.startsWith('gu')) return 'gu';
+    if (nav.startsWith('en')) return 'en';
+    return 'hi';
+  }
+
+  function greetingKey() {
     const h = new Date().getHours();
-    $('greeting').textContent =
-      h >= 5 && h < 12 ? '🌅 शुभ प्रभात' :
-      h >= 12 && h < 16 ? '☀️ शुभ दोपहर' :
-      h >= 16 && h < 21 ? '🌇 शुभ संध्या' : '🌙 नमस्ते';
-  })();
+    return h >= 5 && h < 12 ? 'morning' : h >= 12 && h < 16 ? 'noon' : h >= 16 && h < 21 ? 'eve' : 'night';
+  }
+
+  // apply a language to all the text on the page (rerender = also pick a fresh wish)
+  function setLang(l, rerender) {
+    lang = l;
+    document.documentElement.lang = l;
+    WISHES = WISHES_BY[l];
+    ALL = [].concat(...Object.values(WISHES));
+    document.querySelectorAll('[data-i18n]').forEach((el) => { el.textContent = t(el.dataset.i18n); });
+    document.querySelectorAll('[data-i18n-ph]').forEach((el) => { el.placeholder = t(el.dataset.i18nPh); });
+    $('muteBtn').textContent = muted ? t('muteOff') : t('mute');
+    $('greeting').textContent = t(greetingKey());
+    $('toName').textContent = name ? t('nameFmt')(name) : '';
+    $('langSelect').value = l;
+    document.querySelectorAll('.lang-switch button').forEach((b) => b.classList.toggle('on', b.dataset.lang === l));
+    document.title = t('title') + ' 🪔';
+    if (opened) $('diyaCount').textContent = t('diyaDone');
+    if (rerender && wish.classList.contains('active')) { pickWish(); playWish(); }
+    else if (rerender) current = '';
+  }
 
   // ---------- Rangoli (self-drawing SVG) ----------
   function buildRangoli() {
@@ -251,7 +404,7 @@
       if (lit === 1) startMusic();
       if (lit === DIYAS && !opened) {
         opened = true;
-        $('diyaCount').textContent = 'शुभ दीपावली! 🎆';
+        $('diyaCount').textContent = t('diyaDone');
         for (let k = 0; k < 4; k++) setTimeout(launch, k * 200);
         setTimeout(showWish, 1500);
       }
@@ -273,7 +426,7 @@
     muted = !muted;
     music.muted = muted;
     if (!muted && music.paused) startMusic();
-    $('muteBtn').textContent = muted ? '🔇 संगीत' : '🔊 संगीत';
+    $('muteBtn').textContent = muted ? t('muteOff') : t('mute');
   });
 
   // ---------- Buttons ----------
@@ -350,18 +503,18 @@
 
     if (name) {
       y += 90; g.fillStyle = '#fff4d6'; g.font = `600 46px ${FONT}`;
-      g.fillText(name + ' जी 🙏', w / 2, y);
+      g.fillText(t('nameFmt')(name), w / 2, y);
     }
 
     y += 130;
     const tg = g.createLinearGradient(0, y - 90, 0, y + 20);
     tg.addColorStop(0, '#fff1b8'); tg.addColorStop(1, '#ff9f1c');
-    g.fillStyle = tg; fit('नूतन वर्षाभिनंदन', `{s}px ${SERIF}`, 112, 860);
-    g.fillText('नूतन वर्षाभिनंदन', w / 2, y);
+    g.fillStyle = tg; fit(t('title'), `{s}px ${SERIF}`, 112, 860);
+    g.fillText(t('title'), w / 2, y);
 
-    y += 72; g.fillStyle = '#ffc94d'; g.font = `46px ${FONT}`; g.fillText('નૂતન વર્ષાભિનંદન', w / 2, y);
+    y += 72; g.fillStyle = '#ffc94d'; g.font = `46px ${FONT}`; g.fillText(t('sub'), w / 2, y);
     y += 56; g.fillStyle = 'rgba(255,244,214,.75)'; g.font = `30px ${FONT}`;
-    g.fillText('कार्तिक शुक्ल प्रतिपदा • विक्रम संवत २०८३', w / 2, y);
+    g.fillText(t('samvat'), w / 2, y);
 
     y += 56;
     const lg = g.createLinearGradient(140, 0, w - 140, 0);
@@ -375,7 +528,7 @@
     for (const ln of lines) { g.fillText(ln, w / 2, y); y += 70; }
 
     y += 40;
-    g.fillStyle = '#ffc94d'; g.font = `68px ${SERIF}`; g.fillText('साल मुबारक! 🎆', w / 2, y);
+    g.fillStyle = '#ffc94d'; g.font = `68px ${SERIF}`; g.fillText(t('saal'), w / 2, y);
 
     g.fillStyle = 'rgba(255,244,214,.6)'; g.font = `28px ${FONT}`;
     g.fillText('Made with ❤️', w / 2, h - 105);
@@ -385,7 +538,7 @@
 
   $('saveBtn').addEventListener('click', async () => {
     const note = $('saveNote');
-    note.textContent = 'इमेज बन रही है…';
+    note.textContent = t('saving');
     try {
       const blob = await buildImage();
       const file = new File([blob], 'nutan-varshabhinandan.png', { type: 'image/png' });
@@ -396,32 +549,42 @@
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob); a.download = file.name;
         document.body.appendChild(a); a.click(); a.remove();
-        note.textContent = 'इमेज डाउनलोड हो गई ✅';
+        note.textContent = t('saved');
       }
     } catch (e) {
-      note.textContent = e && e.name === 'AbortError' ? '' : 'इमेज नहीं बन सकी, फिर कोशिश करें';
+      note.textContent = e && e.name === 'AbortError' ? '' : t('saveFail');
     }
   });
 
   // ---------- Sharing ----------
   function shareUrl() {
-    const n = $('nameInput').value.trim(), f = $('themeSelect').value;
+    const n = $('nameInput').value.trim(), f = $('themeSelect').value, l = $('langSelect').value;
     const q = new URLSearchParams();
     if (n) q.set('name', n);
     if (f) q.set('for', f);
+    q.set('lang', l);
     const s = q.toString();
     return location.origin + location.pathname + (s ? '?' + s : '');
   }
   function shareText() {
     const n = $('nameInput').value.trim();
-    return (n ? n + ' जी, ' : '') + 'नूतन वर्षाभिनंदन! 🪔 आपके लिए नववर्ष की एक खास शुभकामना:\n' + shareUrl();
+    const l = $('langSelect').value;
+    return (n ? n + ', ' : '') + STR[l].shareMsg + '\n' + shareUrl();
   }
   $('waBtn').addEventListener('click', () => {
     window.open('https://wa.me/?text=' + encodeURIComponent(shareText()), '_blank', 'noopener');
   });
   $('copyBtn').addEventListener('click', async () => {
     const note = $('copyNote');
-    try { await navigator.clipboard.writeText(shareUrl()); note.textContent = 'लिंक कॉपी हो गया ✅'; }
+    try { await navigator.clipboard.writeText(shareUrl()); note.textContent = t('copied'); }
     catch (e) { note.textContent = shareUrl(); }
   });
+
+  // ---------- Language switching ----------
+  document.querySelectorAll('.lang-switch button').forEach((b) => {
+    b.addEventListener('click', () => setLang(b.dataset.lang, true));
+  });
+  $('langSelect').addEventListener('change', () => { /* only affects the shared link */ });
+
+  setLang(detectLang(), false);
 })();
