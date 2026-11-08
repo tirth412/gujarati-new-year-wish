@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>नूतन वर्षाभिनंदन 🪔</title>
+  <meta name="description" content="गुजराती नववर्ष (बेस्तु वरस) की हार्दिक शुभकामनाएँ">
+  <meta property="og:title" content="नूतन वर्षाभिनंदन 🪔">
+  <meta property="og:description" content="आपके लिए नववर्ष की एक खास शुभकामना ✨">
+  <meta name="theme-color" content="#4a0d1a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <canvas id="fx" aria-hidden="true"></canvas>
+
+  <!-- Opening screen -->
+  <section id="intro" class="screen active">
+    <div class="diya" aria-hidden="true">
+      <div class="flame"></div>
+      <div class="bowl"></div>
+    </div>
+    <p class="intro-text">आपके लिए एक खास शुभकामना</p>
+    <button id="openBtn" class="btn primary">शुभकामना खोलें 🪔</button>
+  </section>
+
+  <!-- Wish screen -->
+  <main id="wish" class="screen">
+    <div class="card">
+      <div class="corner tl"></div><div class="corner tr"></div>
+      <div class="corner bl"></div><div class="corner br"></div>
+
+      <p class="om">ॐ</p>
+      <p id="toName" class="to-name"></p>
+      <h1 class="title">नूतन वर्षाभिनंदन</h1>
+      <p class="gu">નૂતન વર્ષાભિનંદન</p>
+      <div class="divider"><span>🪔</span></div>
+      <p id="message" class="message"></p>
+      <p class="saal">साल मुबारक! 🎆</p>
+    </div>
+
+    <div class="actions">
+      <button id="replayBtn" class="btn ghost">🔁 फिर से देखें</button>
+      <button id="muteBtn" class="btn ghost">🔊 संगीत</button>
+    </div>
+
+    <section class="share">
+      <h2>अपनों को शुभकामना भेजें</h2>
+      <label for="nameInput">उनका नाम लिखें</label>
+      <input id="nameInput" type="text" placeholder="जैसे: राहुल" maxlength="40" autocomplete="off">
+      <div class="share-row">
+        <button id="waBtn" class="btn primary">WhatsApp पर भेजें</button>
+        <button id="copyBtn" class="btn ghost">लिंक कॉपी करें</button>
+      </div>
+      <p id="copyNote" class="note" aria-live="polite"></p>
+    </section>
+
+    <footer>Made with ❤️ • नववर्ष की हार्दिक शुभकामनाएँ</footer>
+  </main>
+
+  <audio id="music" src="music.mp3" loop preload="auto"></audio>
+  <script src="script.js"></script>
+</body>
+</html>
