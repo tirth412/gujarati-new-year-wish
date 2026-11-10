@@ -12,5 +12,16 @@ service cloud.firestore {
         && request.auth.token.email_verified == true;
       allow update, delete: if false;
     }
+
+    match /visits/{id} {
+      allow create: if request.resource.data.keys().hasOnly(['visitor','src','lang','theme','device','returning','at'])
+        && request.resource.data.src in ['shared','direct']
+        && request.resource.data.device in ['mobile','desktop']
+        && request.resource.data.visitor.size() <= 64;
+      allow read: if request.auth != null
+        && request.auth.token.email == 'tirth412@gmail.com'
+        && request.auth.token.email_verified == true;
+      allow update, delete: if false;
+    }
   }
 }

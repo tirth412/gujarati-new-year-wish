@@ -30,6 +30,19 @@
     </div>
     <div id="app" hidden style="width:100%;display:flex;flex-direction:column;gap:20px">
       <div class="panel stats">
+        <div class="stat"><b id="vTotal">0</b><span>Total opens</span></div>
+        <div class="stat"><b id="vUnique">0</b><span>Unique visitors</span></div>
+        <div class="stat"><b id="vShared">0</b><span>Opened via shared link</span></div>
+        <div class="stat"><b id="vToday">0</b><span>Opens today</span></div>
+      </div>
+      <div class="panel tbl-wrap">
+        <table>
+          <thead><tr><th>When</th><th>Source</th><th>Visitor</th><th>Device</th><th>Lang</th><th>Theme</th></tr></thead>
+          <tbody id="vRows"></tbody>
+        </table>
+        <p id="vEmpty" class="empty" hidden>No opens yet.</p>
+      </div>
+      <div class="panel stats">
         <div class="stat"><b id="sTotal">0</b><span>Total shares</span></div>
         <div class="stat"><b id="sWa">0</b><span>WhatsApp</span></div>
         <div class="stat"><b id="sCopy">0</b><span>Link copied</span></div>
@@ -65,7 +78,22 @@
       if (user && !ok) { $('msg').textContent = 'This account is not allowed.'; signOut(auth); return; }
       if (!ok) return;
       $('msg').textContent = '';
+      try { localStorage.setItem('wishOwner', '1'); } catch (e) { /* storage blocked */ }
       try {
+        const vs = (await getDocs(query(collection(db, 'visits'), orderBy('at', 'desc'), limit(1000)))).docs.map((d) => d.data());
+        const day = new Date(); day.setHours(0, 0, 0, 0);
+        $('vTotal').textContent = vs.length;
+        $('vUnique').textContent = new Set(vs.map((v) => v.visitor)).size;
+        $('vShared').textContent = vs.filter((v) => v.src === 'shared').length;
+        $('vToday').textContent = vs.filter((v) => v.at && v.at.toDate() >= day).length;
+        $('vEmpty').hidden = vs.length > 0;
+        $('vRows').replaceChildren(...vs.slice(0, 200).map((v) => {
+          const tr = document.createElement('tr');
+          [v.at ? v.at.toDate().toLocaleString() : '', v.src === 'shared' ? 'Shared link' : 'Direct', (v.returning ? 'Returning ' : 'New ') + (v.visitor || '').slice(0, 4), v.device, v.lang || '-', v.theme || 'general'].forEach((x) => {
+            const td = document.createElement('td'); td.textContent = x; tr.appendChild(td);
+          });
+          return tr;
+        }));
         const snap = await getDocs(query(collection(db, 'shares'), orderBy('at', 'desc'), limit(500)));
         const rows = snap.docs.map((d) => d.data());
         $('sTotal').textContent = rows.length;
