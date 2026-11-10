@@ -2,62 +2,212 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="robots" content="noindex, nofollow">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#4a0d1a" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#fff1cf" media="(prefers-color-scheme: light)">
   <title>Share log • Admin</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700&family=Noto+Sans+Gujarati:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    .admin { max-width: 760px; margin: 0 auto; padding: 36px 16px 48px; display: flex; flex-direction: column; gap: 20px; align-items: center; min-height: 100vh; }
-    .admin h1 { font-size: 1.6rem; color: var(--gold); text-align: center; }
-    .panel { width: 100%; background: linear-gradient(160deg, var(--card1), var(--card2)); border: 1.5px solid rgba(255,201,77,.35); border-radius: 20px; padding: 20px; }
-    .stats { display: flex; gap: 12px; flex-wrap: wrap; }
-    .stat { flex: 1 1 140px; text-align: center; padding: 14px; border-radius: 14px; background: rgba(0,0,0,.25); }
-    .stat b { display: block; font-size: 1.8rem; color: var(--gold); }
-    .stat span { font-size: .85rem; opacity: .75; }
-    .tbl-wrap { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: .95rem; }
-    th, td { padding: 10px 12px; text-align: left; white-space: nowrap; border-bottom: 1px solid rgba(255,201,77,.15); }
-    th { color: var(--gold); font-weight: 600; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; }
-    .empty { text-align: center; opacity: .7; padding: 20px; }
+    /* Light (festive cream) is the default; dark (festive maroon) follows the device setting. */
+    :root {
+      --bg1: #fff7e0; --bg2: #ffe9b8; --bg3: #ffd98a;
+      --card: rgba(255, 255, 255, .72);
+      --tile: rgba(122, 20, 40, .06);
+      --ink: #4a0d1a;
+      --muted: rgba(74, 13, 26, .65);
+      --accent: #b3470f;
+      --accent-2: #d97706;
+      --line: rgba(122, 20, 40, .16);
+      --chip: rgba(217, 119, 6, .16);
+      --chip-ink: #8a4300;
+      --btn-ink: #fff4d6;
+      --btn-bg: linear-gradient(135deg, #a3162f, #7a1428);
+      --bar: linear-gradient(180deg, #f59e0b, #b3470f);
+      --shadow: 0 8px 28px rgba(122, 20, 40, .12);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg1: #7a1428; --bg2: #4a0d1a; --bg3: #2a0610;
+        --card: rgba(122, 20, 40, .55);
+        --tile: rgba(0, 0, 0, .25);
+        --ink: #fff4d6;
+        --muted: rgba(255, 244, 214, .7);
+        --accent: #ffc94d;
+        --accent-2: #ff9f1c;
+        --line: rgba(255, 201, 77, .2);
+        --chip: rgba(255, 201, 77, .16);
+        --chip-ink: #ffc94d;
+        --btn-ink: #4a0d1a;
+        --btn-bg: linear-gradient(135deg, #ffc94d, #ff9f1c);
+        --bar: linear-gradient(180deg, #ffc94d, #ff9f1c);
+        --shadow: 0 8px 28px rgba(0, 0, 0, .35);
+      }
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    [hidden] { display: none !important; }
+    html, body { min-height: 100%; }
+    body {
+      font-family: 'Hind', 'Noto Sans Gujarati', sans-serif;
+      color: var(--ink);
+      background: radial-gradient(ellipse at 50% 0%, var(--bg1) 0%, var(--bg2) 60%, var(--bg3) 100%) fixed;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .wrap > *, .grid2 > *, #app > * { min-width: 0; }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 20px 16px calc(32px + env(safe-area-inset-bottom)); display: flex; flex-direction: column; gap: 16px; }
+
+    header { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .brand .diya { font-size: 2rem; filter: drop-shadow(0 0 10px rgba(255, 170, 40, .6)); }
+    h1 { font-size: 1.4rem; line-height: 1.15; color: var(--accent); }
+    .who { font-size: .82rem; color: var(--muted); overflow-wrap: anywhere; }
+    .head-actions { display: flex; gap: 8px; }
+
+    .btn {
+      font: inherit; font-weight: 600; cursor: pointer; border: 0; border-radius: 999px;
+      padding: 10px 18px; min-height: 42px; color: var(--btn-ink); background: var(--btn-bg);
+      box-shadow: 0 4px 16px rgba(217, 119, 6, .3); transition: transform .12s;
+    }
+    .btn:active { transform: scale(.97); }
+    .btn.ghost { color: var(--accent); background: var(--chip); box-shadow: none; border: 1.5px solid var(--line); }
+
+    #app { display: flex; flex-direction: column; gap: 16px; }
+    .panel { background: var(--card); border: 1.5px solid var(--line); border-radius: 20px; padding: 16px; box-shadow: var(--shadow); backdrop-filter: blur(6px); }
+    .ornament { height: 1px; background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity: .7; }
+
+    /* login */
+    #login { text-align: center; padding: 36px 20px; display: flex; flex-direction: column; gap: 16px; align-items: center; margin-top: 8vh; }
+    #login p { color: var(--muted); }
+
+    /* stats */
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    @media (min-width: 760px) { .stats { grid-template-columns: repeat(6, 1fr); } }
+    .stat { background: var(--tile); border: 1px solid var(--line); border-radius: 16px; padding: 12px 6px; text-align: center; }
+    .stat b { display: block; font-size: 1.7rem; line-height: 1.1; color: var(--accent); font-weight: 700; }
+    .stat span { display: block; font-size: .74rem; color: var(--muted); margin-top: 2px; line-height: 1.25; }
+
+    /* tabs */
+    .tabs { display: flex; gap: 6px; padding: 5px; border-radius: 999px; background: var(--tile); border: 1px solid var(--line); }
+    .tab { flex: 1; font: inherit; font-weight: 600; cursor: pointer; border: 0; border-radius: 999px; padding: 10px 8px; color: var(--muted); background: transparent; }
+    .tab[aria-selected="true"] { color: var(--btn-ink); background: var(--btn-bg); box-shadow: 0 3px 12px rgba(217, 119, 6, .3); }
+    .view[hidden] { display: none; }
+
+    /* overview */
+    .grid2 { display: grid; gap: 16px; grid-template-columns: 1fr; }
+    @media (min-width: 760px) { .grid2 { grid-template-columns: 1.5fr 1fr; } }
+    h2 { font-size: 1rem; color: var(--accent); margin-bottom: 12px; }
+    .chart { display: flex; align-items: flex-end; gap: 8px; height: 150px; padding-top: 18px; }
+    .col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: 6px; min-width: 0; }
+    .bar { width: 100%; max-width: 38px; border-radius: 8px 8px 3px 3px; background: var(--bar); min-height: 3px; position: relative; }
+    .bar i { position: absolute; top: -18px; left: 0; right: 0; text-align: center; font-style: normal; font-size: .75rem; font-weight: 600; color: var(--ink); }
+    .col small { font-size: .7rem; color: var(--muted); }
+    .split { display: flex; flex-direction: column; gap: 12px; }
+    .split-row .lbl { display: flex; justify-content: space-between; font-size: .88rem; margin-bottom: 4px; }
+    .meter { height: 8px; border-radius: 99px; background: var(--tile); overflow: hidden; border: 1px solid var(--line); }
+    .meter div { height: 100%; background: var(--bar); border-radius: 99px; }
+
+    /* tables */
+    .scroller { max-height: 56vh; overflow: auto; border-radius: 12px; }
+    table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+    th, td { padding: 10px 10px; text-align: left; white-space: nowrap; border-bottom: 1px solid var(--line); }
+    th { position: sticky; top: 0; background: var(--bg2); color: var(--accent); font-size: .74rem; letter-spacing: .08em; text-transform: uppercase; z-index: 1; }
+    .chip { display: inline-block; padding: 2px 10px; border-radius: 99px; background: var(--chip); color: var(--chip-ink); font-size: .8rem; font-weight: 600; }
+    .more { display: flex; justify-content: center; margin-top: 12px; }
+    .empty { text-align: center; color: var(--muted); padding: 22px 0; }
+    .note { min-height: 1.3em; text-align: center; font-size: .9rem; color: var(--accent); }
+
+    /* tables become cards on phones */
+    @media (max-width: 640px) {
+      .scroller { max-height: none; overflow: visible; }
+      table, tbody { display: block; }
+      thead { display: none; }
+      tr { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px 10px; padding: 12px; margin-bottom: 10px; border: 1px solid var(--line); border-radius: 14px; background: var(--tile); }
+      td { display: block; padding: 0; border: 0; white-space: normal; font-size: .9rem; }
+      td::before { content: attr(data-l); display: block; font-size: .66rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+      td.full { grid-column: 1 / -1; font-weight: 600; }
+      td { min-width: 0; overflow-wrap: anywhere; }
+    }
+    @media (prefers-reduced-motion: reduce) { .btn, .tab { transition: none; } }
   </style>
 </head>
 <body>
-  <main class="admin">
-    <h1>🪔 Share log</h1>
-    <div id="login" class="panel" style="text-align:center">
-      <p style="margin-bottom:16px">Owner access only.</p>
-      <button id="signIn" class="btn primary">Sign in with Google</button>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <span class="diya" aria-hidden="true">🪔</span>
+        <div>
+          <h1>Share log</h1>
+          <p id="who" class="who">Owner dashboard</p>
+        </div>
+      </div>
+      <div id="headActions" class="head-actions" hidden>
+        <button id="refresh" class="btn ghost">Refresh</button>
+        <button id="signOut" class="btn ghost">Sign out</button>
+      </div>
+    </header>
+    <div class="ornament"></div>
+
+    <div id="login" class="panel">
+      <p>Owner access only.</p>
+      <button id="signIn" class="btn">Sign in with Google</button>
     </div>
-    <div id="app" hidden style="width:100%;display:flex;flex-direction:column;gap:20px">
-      <div class="panel stats">
+
+    <div id="app" hidden>
+      <div class="stats">
         <div class="stat"><b id="vTotal">0</b><span>Total opens</span></div>
         <div class="stat"><b id="vUnique">0</b><span>Unique visitors</span></div>
-        <div class="stat"><b id="vShared">0</b><span>Opened via shared link</span></div>
+        <div class="stat"><b id="vShared">0</b><span>Via shared link</span></div>
         <div class="stat"><b id="vToday">0</b><span>Opens today</span></div>
-      </div>
-      <div class="panel tbl-wrap">
-        <table>
-          <thead><tr><th>When</th><th>Source</th><th>Visitor</th><th>Device</th><th>Lang</th><th>Theme</th></tr></thead>
-          <tbody id="vRows"></tbody>
-        </table>
-        <p id="vEmpty" class="empty" hidden>No opens yet.</p>
-      </div>
-      <div class="panel stats">
         <div class="stat"><b id="sTotal">0</b><span>Total shares</span></div>
-        <div class="stat"><b id="sWa">0</b><span>WhatsApp</span></div>
-        <div class="stat"><b id="sCopy">0</b><span>Link copied</span></div>
+        <div class="stat"><b id="sSplit">0 / 0</b><span>WhatsApp / Copy</span></div>
       </div>
-      <div class="panel tbl-wrap">
-        <table>
-          <thead><tr><th>When</th><th>Shared to</th><th>Via</th><th>Theme</th><th>Lang</th></tr></thead>
-          <tbody id="rows"></tbody>
-        </table>
-        <p id="empty" class="empty" hidden>No shares yet.</p>
+
+      <div class="tabs" role="tablist">
+        <button class="tab" role="tab" data-tab="overview" aria-selected="true">Overview</button>
+        <button class="tab" role="tab" data-tab="opens" aria-selected="false">Opens</button>
+        <button class="tab" role="tab" data-tab="shares" aria-selected="false">Shares</button>
       </div>
-      <button id="signOut" class="btn ghost">Sign out</button>
+
+      <section id="v-overview" class="view">
+        <div class="grid2">
+          <div class="panel"><h2>Opens, last 7 days</h2><div id="chart" class="chart"></div></div>
+          <div class="panel"><h2>Breakdown</h2><div id="split" class="split"></div></div>
+        </div>
+      </section>
+
+      <section id="v-opens" class="view" hidden>
+        <div class="panel">
+          <div class="scroller">
+            <table>
+              <thead><tr><th>When</th><th>Source</th><th>Visitor</th><th>Device</th><th>Lang</th><th>Theme</th></tr></thead>
+              <tbody id="vRows"></tbody>
+            </table>
+          </div>
+          <p id="vEmpty" class="empty" hidden>No opens yet.</p>
+          <div class="more"><button id="vMore" class="btn ghost" hidden>Show more</button></div>
+        </div>
+      </section>
+
+      <section id="v-shares" class="view" hidden>
+        <div class="panel">
+          <div class="scroller">
+            <table>
+              <thead><tr><th>When</th><th>Shared to</th><th>Via</th><th>Theme</th><th>Lang</th></tr></thead>
+              <tbody id="sRows"></tbody>
+            </table>
+          </div>
+          <p id="sEmpty" class="empty" hidden>No shares yet.</p>
+          <div class="more"><button id="sMore" class="btn ghost" hidden>Show more</button></div>
+        </div>
+      </section>
     </div>
-    <p id="msg" class="note"></p>
-  </main>
+    <p id="msg" class="note" aria-live="polite"></p>
+  </div>
+
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
     import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
@@ -67,48 +217,138 @@
     const $ = (id) => document.getElementById(id);
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app), db = getFirestore(app);
+    const PAGE = 10, STEP = 20;
+
+    let visits = [], shares = [];
+    const shown = { v: PAGE, s: PAGE };
 
     $('signIn').onclick = () => signInWithPopup(auth, new GoogleAuthProvider()).catch((e) => { $('msg').textContent = e.message; });
     $('signOut').onclick = () => signOut(auth);
+    $('refresh').onclick = load;
+    $('vMore').onclick = () => { shown.v += STEP; renderVisits(); };
+    $('sMore').onclick = () => { shown.s += STEP; renderShares(); };
 
-    onAuthStateChanged(auth, async (user) => {
+    document.querySelectorAll('.tab').forEach((t) => t.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach((x) => x.setAttribute('aria-selected', String(x === t)));
+      ['overview', 'opens', 'shares'].forEach((n) => { $('v-' + n).hidden = n !== t.dataset.tab; });
+    }));
+
+    const fmt = (ts) => ts ? ts.toDate().toLocaleString([], { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : '';
+    function cell(tr, label, value, chip, full) {
+      const td = document.createElement('td');
+      td.dataset.l = label;
+      if (full) td.className = 'full';
+      if (chip) { const s = document.createElement('span'); s.className = 'chip'; s.textContent = value; td.appendChild(s); }
+      else td.textContent = value;
+      tr.appendChild(td);
+    }
+
+    function renderVisits() {
+      $('vEmpty').hidden = visits.length > 0;
+      $('vRows').replaceChildren(...visits.slice(0, shown.v).map((v) => {
+        const tr = document.createElement('tr');
+        cell(tr, 'When', fmt(v.at), false, true);
+        cell(tr, 'Source', v.src === 'shared' ? 'Shared link' : 'Direct', true);
+        cell(tr, 'Visitor', (v.returning ? 'Returning ' : 'New ') + (v.visitor || '').slice(0, 4));
+        cell(tr, 'Device', v.device);
+        cell(tr, 'Lang', v.lang || '-');
+        cell(tr, 'Theme', v.theme || 'general');
+        return tr;
+      }));
+      $('vMore').hidden = shown.v >= visits.length;
+    }
+    function renderShares() {
+      $('sEmpty').hidden = shares.length > 0;
+      $('sRows').replaceChildren(...shares.slice(0, shown.s).map((r) => {
+        const tr = document.createElement('tr');
+        cell(tr, 'When', fmt(r.at), false, true);
+        cell(tr, 'Shared to', r.to || '—');
+        cell(tr, 'Via', r.method === 'whatsapp' ? 'WhatsApp' : 'Copy link', true);
+        cell(tr, 'Theme', r.theme || 'general');
+        cell(tr, 'Lang', r.lang || '-');
+        return tr;
+      }));
+      $('sMore').hidden = shown.s >= shares.length;
+    }
+
+    function renderOverview() {
+      // last 7 days
+      const days = [];
+      const base = new Date(); base.setHours(0, 0, 0, 0);
+      for (let i = 6; i >= 0; i--) { const d = new Date(base); d.setDate(d.getDate() - i); days.push({ d, n: 0 }); }
+      visits.forEach((v) => {
+        if (!v.at) return;
+        const t = v.at.toDate();
+        const slot = days.find((x) => t >= x.d && t < new Date(x.d.getTime() + 864e5));
+        if (slot) slot.n++;
+      });
+      const max = Math.max(1, ...days.map((x) => x.n));
+      $('chart').replaceChildren(...days.map((x) => {
+        const col = document.createElement('div'); col.className = 'col';
+        const bar = document.createElement('div'); bar.className = 'bar'; bar.style.height = (x.n / max * 100) + '%';
+        const num = document.createElement('i'); num.textContent = x.n; bar.appendChild(num);
+        const lab = document.createElement('small'); lab.textContent = x.d.toLocaleDateString([], { weekday: 'short' });
+        col.append(bar, lab);
+        return col;
+      }));
+
+      const total = visits.length || 1;
+      const rows = [
+        ['Shared link', visits.filter((v) => v.src === 'shared').length],
+        ['Direct', visits.filter((v) => v.src === 'direct').length],
+        ['Mobile', visits.filter((v) => v.device === 'mobile').length],
+        ['Desktop', visits.filter((v) => v.device === 'desktop').length],
+        ['Returning', visits.filter((v) => v.returning).length],
+      ];
+      $('split').replaceChildren(...rows.map(([name, n]) => {
+        const r = document.createElement('div'); r.className = 'split-row';
+        const l = document.createElement('div'); l.className = 'lbl';
+        const a = document.createElement('span'); a.textContent = name;
+        const b = document.createElement('span'); b.textContent = n + ' · ' + Math.round(n / total * 100) + '%';
+        l.append(a, b);
+        const m = document.createElement('div'); m.className = 'meter';
+        const f = document.createElement('div'); f.style.width = (n / total * 100) + '%'; m.appendChild(f);
+        r.append(l, m);
+        return r;
+      }));
+    }
+
+    function renderStats() {
+      const day = new Date(); day.setHours(0, 0, 0, 0);
+      $('vTotal').textContent = visits.length;
+      $('vUnique').textContent = new Set(visits.map((v) => v.visitor)).size;
+      $('vShared').textContent = visits.filter((v) => v.src === 'shared').length;
+      $('vToday').textContent = visits.filter((v) => v.at && v.at.toDate() >= day).length;
+      $('sTotal').textContent = shares.length;
+      $('sSplit').textContent = shares.filter((r) => r.method === 'whatsapp').length + ' / ' + shares.filter((r) => r.method === 'copy').length;
+    }
+
+    async function fetchAll(name, max) {
+      const snap = await getDocs(query(collection(db, name), orderBy('at', 'desc'), limit(max)));
+      return snap.docs.map((d) => d.data());
+    }
+    async function load() {
+      $('msg').textContent = '';
+      const [v, s] = await Promise.allSettled([fetchAll('visits', 1000), fetchAll('shares', 500)]);
+      visits = v.status === 'fulfilled' ? v.value : [];
+      shares = s.status === 'fulfilled' ? s.value : [];
+      const failed = [v, s].find((x) => x.status === 'rejected');
+      if (failed) $('msg').textContent = 'Could not load some data: ' + failed.reason.message;
+      shown.v = shown.s = PAGE;
+      renderStats(); renderOverview(); renderVisits(); renderShares();
+    }
+
+    onAuthStateChanged(auth, (user) => {
       const ok = user && user.email === OWNER_EMAIL;
       $('login').hidden = !!ok;
       $('app').hidden = !ok;
+      $('headActions').hidden = !ok;
+      $('who').textContent = ok ? user.email : 'Owner dashboard';
       if (user && !ok) { $('msg').textContent = 'This account is not allowed.'; signOut(auth); return; }
       if (!ok) return;
-      $('msg').textContent = '';
+      // Marks this browser as the owner's so your own opens are not counted.
       try { localStorage.setItem('wishOwner', '1'); } catch (e) { /* storage blocked */ }
-      try {
-        const vs = (await getDocs(query(collection(db, 'visits'), orderBy('at', 'desc'), limit(1000)))).docs.map((d) => d.data());
-        const day = new Date(); day.setHours(0, 0, 0, 0);
-        $('vTotal').textContent = vs.length;
-        $('vUnique').textContent = new Set(vs.map((v) => v.visitor)).size;
-        $('vShared').textContent = vs.filter((v) => v.src === 'shared').length;
-        $('vToday').textContent = vs.filter((v) => v.at && v.at.toDate() >= day).length;
-        $('vEmpty').hidden = vs.length > 0;
-        $('vRows').replaceChildren(...vs.slice(0, 200).map((v) => {
-          const tr = document.createElement('tr');
-          [v.at ? v.at.toDate().toLocaleString() : '', v.src === 'shared' ? 'Shared link' : 'Direct', (v.returning ? 'Returning ' : 'New ') + (v.visitor || '').slice(0, 4), v.device, v.lang || '-', v.theme || 'general'].forEach((x) => {
-            const td = document.createElement('td'); td.textContent = x; tr.appendChild(td);
-          });
-          return tr;
-        }));
-        const snap = await getDocs(query(collection(db, 'shares'), orderBy('at', 'desc'), limit(500)));
-        const rows = snap.docs.map((d) => d.data());
-        $('sTotal').textContent = rows.length;
-        $('sWa').textContent = rows.filter((r) => r.method === 'whatsapp').length;
-        $('sCopy').textContent = rows.filter((r) => r.method === 'copy').length;
-        $('empty').hidden = rows.length > 0;
-        $('rows').replaceChildren(...rows.map((r) => {
-          const tr = document.createElement('tr');
-          const when = r.at ? r.at.toDate().toLocaleString() : '';
-          [when, r.to || '—', r.method === 'whatsapp' ? 'WhatsApp' : 'Copy link', r.theme || 'general', r.lang].forEach((v) => {
-            const td = document.createElement('td'); td.textContent = v; tr.appendChild(td);
-          });
-          return tr;
-        }));
-      } catch (e) { $('msg').textContent = 'Could not load log: ' + e.message; }
+      load();
     });
   </script>
 </body>
