@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Share log • Admin</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .admin { max-width: 760px; margin: 0 auto; padding: 36px 16px 48px; display: flex; flex-direction: column; gap: 20px; align-items: center; min-height: 100vh; }
+    .admin h1 { font-size: 1.6rem; color: var(--gold); text-align: center; }
+    .panel { width: 100%; background: linear-gradient(160deg, var(--card1), var(--card2)); border: 1.5px solid rgba(255,201,77,.35); border-radius: 20px; padding: 20px; }
+    .stats { display: flex; gap: 12px; flex-wrap: wrap; }
+    .stat { flex: 1 1 140px; text-align: center; padding: 14px; border-radius: 14px; background: rgba(0,0,0,.25); }
+    .stat b { display: block; font-size: 1.8rem; color: var(--gold); }
+    .stat span { font-size: .85rem; opacity: .75; }
+    .tbl-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+    th, td { padding: 10px 12px; text-align: left; white-space: nowrap; border-bottom: 1px solid rgba(255,201,77,.15); }
+    th { color: var(--gold); font-weight: 600; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; }
+    .empty { text-align: center; opacity: .7; padding: 20px; }
+  </style>
+</head>
+<body>
+  <main class="admin">
+    <h1>🪔 Share log</h1>
+    <div id="login" class="panel" style="text-align:center">
+      <p style="margin-bottom:16px">Owner access only.</p>
+      <button id="signIn" class="btn primary">Sign in with Google</button>
+    </div>
+    <div id="app" hidden style="width:100%;display:flex;flex-direction:column;gap:20px">
+      <div class="panel stats">
+        <div class="stat"><b id="sTotal">0</b><span>Total shares</span></div>
+        <div class="stat"><b id="sWa">0</b><span>WhatsApp</span></div>
+        <div class="stat"><b id="sCopy">0</b><span>Link copied</span></div>
+      </div>
+      <div class="panel tbl-wrap">
+        <table>
+          <thead><tr><th>When</th><th>Shared to</th><th>Via</th><th>Theme</th><th>Lang</th></tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+        <p id="empty" class="empty" hidden>No shares yet.</p>
+      </div>
+      <button id="signOut" class="btn ghost">Sign out</button>
+    </div>
+    <p id="msg" class="note"></p>
+  </main>
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+    import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+    import { getFirestore, collection, query, orderBy, limit, getDocs } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+    import { firebaseConfig, OWNER_EMAIL } from './firebase-config.js';
+
+    const $ = (id) => document.getElementById(id);
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app), db = getFirestore(app);
+
+    $('signIn').onclick = () => signInWithPopup(auth, new GoogleAuthProvider()).catch((e) => { $('msg').textContent = e.message; });
+    $('signOut').onclick = () => signOut(auth);
+
+    onAuthStateChanged(auth, async (user) => {
+      const ok = user && user.email === OWNER_EMAIL;
+      $('login').hidden = !!ok;
+      $('app').hidden = !ok;
+      if (user && !ok) { $('msg').textContent = 'This account is not allowed.'; signOut(auth); return; }
+      if (!ok) return;
+      $('msg').textContent = '';
+      try {
+        const snap = await getDocs(query(collection(db, 'shares'), orderBy('at', 'desc'), limit(500)));
+        const rows = snap.docs.map((d) => d.data());
+        $('sTotal').textContent = rows.length;
+        $('sWa').textContent = rows.filter((r) => r.method === 'whatsapp').length;
+        $('sCopy').textContent = rows.filter((r) => r.method === 'copy').length;
+        $('empty').hidden = rows.length > 0;
+        $('rows').replaceChildren(...rows.map((r) => {
+          const tr = document.createElement('tr');
+          const when = r.at ? r.at.toDate().toLocaleString() : '';
+          [when, r.to || '—', r.method === 'whatsapp' ? 'WhatsApp' : 'Copy link', r.theme || 'general', r.lang].forEach((v) => {
+            const td = document.createElement('td'); td.textContent = v; tr.appendChild(td);
+          });
+          return tr;
+        }));
+      } catch (e) { $('msg').textContent = 'Could not load log: ' + e.message; }
+    });
+  </script>
+</body>
+</html>

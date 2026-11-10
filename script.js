@@ -126,7 +126,7 @@
       th_general: 'सबके लिए (सामान्य)', th_family: 'परिवार', th_wealth: 'धन-समृद्धि / व्यापार',
       th_health: 'स्वास्थ्य', th_success: 'सफलता', th_friends: 'दोस्त',
       wa: 'WhatsApp पर भेजें', copy: 'लिंक कॉपी करें',
-      footer: 'Made with ❤️ • नववर्ष की हार्दिक शुभकामनाएँ',
+      footer: 'नववर्ष की हार्दिक शुभकामनाएँ',
       nameFmt: (n) => n + ' जी 🙏',
       saving: 'इमेज बन रही है…', saved: 'इमेज डाउनलोड हो गई ✅', saveFail: 'इमेज नहीं बन सकी, फिर कोशिश करें',
       copied: 'लिंक कॉपी हो गया ✅',
@@ -145,7 +145,7 @@
       th_general: 'સૌ માટે (સામાન્ય)', th_family: 'પરિવાર', th_wealth: 'ધન-સમૃદ્ધિ / વ્યવસાય',
       th_health: 'સ્વાસ્થ્ય', th_success: 'સફળતા', th_friends: 'મિત્રો',
       wa: 'WhatsApp પર મોકલો', copy: 'લિંક કૉપી કરો',
-      footer: 'Made with ❤️ • નવા વર્ષની હાર્દિક શુભકામનાઓ',
+      footer: 'નવા વર્ષની હાર્દિક શુભકામનાઓ',
       nameFmt: (n) => n + ' જી 🙏',
       saving: 'ઇમેજ બની રહી છે…', saved: 'ઇમેજ ડાઉનલોડ થઈ ✅', saveFail: 'ઇમેજ બની શકી નહીં, ફરી પ્રયત્ન કરો',
       copied: 'લિંક કૉપી થઈ ગઈ ✅',
@@ -164,7 +164,7 @@
       th_general: 'Everyone (general)', th_family: 'Family', th_wealth: 'Wealth / Business',
       th_health: 'Health', th_success: 'Success', th_friends: 'Friends',
       wa: 'Send on WhatsApp', copy: 'Copy link',
-      footer: 'Made with ❤️ • Warm wishes for the new year',
+      footer: 'Warm wishes for the new year',
       nameFmt: (n) => 'Dear ' + n + ' 🙏',
       saving: 'Creating image…', saved: 'Image downloaded ✅', saveFail: 'Could not create the image, please try again',
       copied: 'Link copied ✅',
@@ -571,11 +571,18 @@
     const l = $('langSelect').value;
     return (n ? n + ', ' : '') + STR[l].shareMsg + '\n' + shareUrl();
   }
+  function track(method) {
+    if (window.logShare) window.logShare({
+      method, to: $('nameInput').value.trim(), theme: $('themeSelect').value, lang: $('langSelect').value,
+    });
+  }
   $('waBtn').addEventListener('click', () => {
+    track('whatsapp');
     window.open('https://wa.me/?text=' + encodeURIComponent(shareText()), '_blank', 'noopener');
   });
   $('copyBtn').addEventListener('click', async () => {
     const note = $('copyNote');
+    track('copy');
     try { await navigator.clipboard.writeText(shareUrl()); note.textContent = t('copied'); }
     catch (e) { note.textContent = shareUrl(); }
   });

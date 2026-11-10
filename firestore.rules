@@ -1,0 +1,16 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /shares/{id} {
+      // Anyone can add a share record, but only with the expected fields and sizes.
+      allow create: if request.resource.data.keys().hasOnly(['method','to','theme','lang','page','at'])
+        && request.resource.data.method in ['whatsapp','copy']
+        && request.resource.data.to.size() <= 40;
+      // Only the owner can read the log.
+      allow read: if request.auth != null
+        && request.auth.token.email == 'tirth412@gmail.com'
+        && request.auth.token.email_verified == true;
+      allow update, delete: if false;
+    }
+  }
+}
