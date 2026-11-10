@@ -183,7 +183,7 @@
         <div class="panel">
           <div class="scroller">
             <table>
-              <thead><tr><th>When</th><th>Source</th><th>Visitor</th><th>Device</th><th>Lang</th><th>Theme</th></tr></thead>
+              <thead><tr><th>When</th><th>Source</th><th>For</th><th>Visitor</th><th>Device</th><th>Lang</th><th>Theme</th></tr></thead>
               <tbody id="vRows"></tbody>
             </table>
           </div>
@@ -249,6 +249,7 @@
         const tr = document.createElement('tr');
         cell(tr, 'When', fmt(v.at), false, true);
         cell(tr, 'Source', v.src === 'shared' ? 'Shared link' : 'Direct', true);
+        cell(tr, 'For', v.name || '—');
         cell(tr, 'Visitor', (v.returning ? 'Returning ' : 'New ') + (v.visitor || '').slice(0, 4));
         cell(tr, 'Device', v.device);
         cell(tr, 'Lang', v.lang || '-');

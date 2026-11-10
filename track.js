@@ -36,6 +36,7 @@ function logVisit() {
     src: q.has('lang') || q.has('for') || q.has('name') ? 'shared' : 'direct',
     lang: (q.get('lang') || '').slice(0, 5),
     theme: (q.get('for') || '').slice(0, 20),
+    name: (q.get('name') || '').trim().slice(0, 40),
     device: /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) ? 'mobile' : 'desktop',
     returning,
     at: serverTimestamp(),
